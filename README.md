@@ -1,6 +1,6 @@
 
 # 💫 About Me:
-🔭 I’m currently studying on Utec University<br>👯 I’m looking to collaborate on professional projects to learn<br>🌱 I’m currently learning React, C++, java<br>💬 Ask me about my favorite games O.O<br>⚡ Fun fact, I really love a tea and coffe
+🔭 I’m currently studying on Utec University<br>👯 I’m looking to collaborate on professional projects to learn and start a develop a good profesional profile<br>🌱 I’m currently learning React, C++, java<br>💬 Ask me about my favorite games O.O<br>⚡ Fun fact, I really love a tea and coffe
 
 
 ## 🌐 Socials:
