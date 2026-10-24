@@ -1,4 +1,14 @@
-"""Genera los SVG animados del README con la paleta del portafolio."""
+"""Genera los SVG animados del README con la paleta del portafolio.
+
+Uso: python scripts/generate_svgs.py
+Las estadísticas (stats.svg) se piden a la API de GitHub con GITHUB_TOKEN / GH_TOKEN
+o, si no existen, con `gh auth token`. Sin token se conserva el stats.svg anterior.
+"""
+import json
+import os
+import subprocess
+import urllib.request
+from datetime import datetime
 from pathlib import Path
 from xml.sax.saxutils import escape
 
@@ -111,7 +121,9 @@ def section(name, cmd):
     (OUT / f"cmd-{name}.svg").write_text(svg(w, h, b, f"{USER}:~$ {cmd}"), encoding="utf-8")
 
 
-# ─── tarjetas de proyecto ──────────────────────────────────────────────────
+
+
+# ─── tarjetas (proyectos y webs de estudio) ────────────────────────────────
 def wrap(text, width):
     lines, cur = [], ""
     for word in text.split():
@@ -123,24 +135,165 @@ def wrap(text, width):
     return lines + [cur]
 
 
-def card(slug, title, desc, stack, status, delay):
+STATUS_COLOR = {"released": GREEN, "live": CYAN, "in-progress": MUTED}
+
+
+def card(slug, title, desc, stack, status, delay, folder="projects"):
     w, h = 272, 178
-    color = GREEN if status == "released" else CYAN
+    color = STATUS_COLOR[status]
+    lines = wrap(desc, 34)
+    assert len(lines) <= 3, f"descripción demasiado larga en {slug}: {lines}"
     b = backdrop(w, h, r=12)
     b += f'\n  <g opacity="0"><set attributeName="opacity" to="1" begin="{delay}s" fill="freeze"/>'
-    b += f'\n  <text x="18" y="30" font-size="11" fill="{MUTED}">~/projects/</text>'
+    b += f'\n  <text x="18" y="30" font-size="11" fill="{MUTED}">~/{folder}/</text>'
     b += f"""
   <circle cx="{w - 22}" cy="26" r="4" fill="{color}">
     <animate attributeName="opacity" values="1;0.35;1" dur="1.9s" repeatCount="indefinite"/>
   </circle>
   <text x="{w - 32}" y="30" font-size="10" fill="{color}" text-anchor="end">{status}</text>"""
     b += f'\n  <text x="18" y="56" font-size="16" font-weight="700" fill="{CYAN}">{escape(title)}</text>'
-    for i, line in enumerate(wrap(desc, 34)):
+    for i, line in enumerate(lines):
         b += f'\n  <text x="18" y="{84 + i * 17}" font-size="11.5" fill="{TEXT}" opacity="0.85">{escape(line)}</text>'
     b += f'\n  <line x1="18" y1="{h - 38}" x2="{w - 18}" y2="{h - 38}" stroke="{BORDER}"/>'
     b += f'\n  <text x="18" y="{h - 17}" font-size="11" fill="{GREEN}">{escape(" · ".join(stack))}</text>'
     b += "\n  </g>"
-    (OUT / f"project-{slug}.svg").write_text(svg(w, h, b, title), encoding="utf-8")
+    prefix = "project" if folder == "projects" else "teaching"
+    (OUT / f"{prefix}-{slug}.svg").write_text(svg(w, h, b, title), encoding="utf-8")
+
+
+# ─── comunidad ─────────────────────────────────────────────────────────────
+def community():
+    w, h = 840, 210
+    x, y0, lh = 24, 70, 25
+    b = backdrop(w, h) + title_bar(w, f"{USER}: ~/community")
+    b += typed("c1", x, y0, "cat /etc/group", 0.3)
+    rows = [
+        ("Director de Sistemas", "Club de Software Libre - UTEC"),
+        ("Asistente de cátedra", "Programación II · UTEC"),
+        ("Mentor", "Desarrollo Basado en Plataformas · 18 h de asesorías"),
+        ("Voluntario", "UTEC Ventures · prototipado con Tech MBA"),
+        ("Hackathons", "RIMAC · HACK UTEC 2025-II · TECSUP · DBP 2025"),
+    ]
+    for i, (role, where) in enumerate(rows):
+        b += reveal(x, y0 + lh * (i + 1),
+                    f'<tspan fill="{GREEN}">▶</tspan> {escape(role.ljust(21))}<tspan fill="{MUTED}">{escape(where)}</tspan>',
+                    1.4 + i * 0.2)
+    (OUT / "community.svg").write_text(svg(w, h, b, "joseph@dev:~$ cat /etc/group"), encoding="utf-8")
+
+
+# ─── estadísticas (API de GitHub) ──────────────────────────────────────────
+LOGIN = "JosephAnderson234"
+# Lenguajes que inflan el conteo por archivos generados (notebooks, sitios exportados, contenido)
+SKIP_LANGS = {"HTML", "Jupyter Notebook", "MDX", "CSS", "Tcl"}
+QUERY = """
+query($login: String!) {
+  user(login: $login) {
+    contributionsCollection {
+      totalCommitContributions totalPullRequestContributions
+      totalRepositoriesWithContributedCommits
+      contributionCalendar { totalContributions }
+    }
+    repositories(first: 100, ownerAffiliations: OWNER, isFork: false, privacy: PUBLIC,
+                 orderBy: {field: PUSHED_AT, direction: DESC}) {
+      totalCount
+      nodes {
+        name pushedAt stargazerCount
+        languages(first: 10, orderBy: {field: SIZE, direction: DESC}) { edges { size node { name } } }
+      }
+    }
+  }
+}"""
+
+
+def github_token():
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    if token:
+        return token
+    try:
+        return subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=True).stdout.strip()
+    except (OSError, subprocess.CalledProcessError):
+        return None
+
+
+def fetch_stats():
+    token = github_token()
+    if not token:
+        return None
+    req = urllib.request.Request(
+        "https://api.github.com/graphql",
+        data=json.dumps({"query": QUERY, "variables": {"login": LOGIN}}).encode(),
+        headers={"Authorization": f"bearer {token}", "Content-Type": "application/json"},
+    )
+    with urllib.request.urlopen(req, timeout=30) as res:
+        return json.load(res)["data"]["user"]
+
+
+def stats():
+    try:
+        user = fetch_stats()
+    except Exception as err:  # sin red o token inválido: se conserva el SVG anterior
+        print("stats: no se pudo consultar GitHub:", err)
+        return
+    if not user:
+        print("stats: sin token, se conserva stats.svg")
+        return
+
+    cc = user["contributionsCollection"]
+    repos = user["repositories"]["nodes"]
+    numbers = [
+        (cc["contributionCalendar"]["totalContributions"], "contribuciones en el último año"),
+        (cc["totalCommitContributions"], "commits"),
+        (cc["totalPullRequestContributions"], "pull requests"),
+        (cc["totalRepositoriesWithContributedCommits"], "repos con commits"),
+        (user["repositories"]["totalCount"], "repos públicos propios"),
+        (sum(r["stargazerCount"] for r in repos), "estrellas"),
+    ]
+    langs = {}
+    for r in repos:
+        for e in r["languages"]["edges"]:
+            name = e["node"]["name"]
+            if name not in SKIP_LANGS:
+                langs[name] = langs.get(name, 0) + e["size"]
+    top = sorted(langs.items(), key=lambda kv: -kv[1])[:6]
+    total = sum(langs.values()) or 1
+    recent = [r for r in repos if r["name"] != LOGIN][:4]
+
+    w, h = 840, 392
+    b = backdrop(w, h) + title_bar(w, f"{USER}: ~ — git log --stats")
+    # columna izquierda: números
+    b += reveal(24, 70, "actividad", 0.2, size=12, fill=MUTED)
+    for i, (n, label) in enumerate(numbers):
+        y = 100 + i * 27
+        b += reveal(24, y, f'<tspan fill="{CYAN}" font-weight="700">{n:>6,}</tspan>  {escape(label)}', 0.4 + i * 0.15)
+    # columna derecha: lenguajes con barras que crecen
+    lx, bar_w = 440, 250
+    b += reveal(lx, 70, "lenguajes · repos públicos", 0.2, size=12, fill=MUTED)
+    for i, (name, size) in enumerate(top):
+        y = 100 + i * 27
+        pct = size / total
+        full = max(bar_w * size / top[0][1], 4)
+        color = CYAN if i % 2 == 0 else GREEN
+        begin = 0.5 + i * 0.15
+        b += reveal(lx, y, escape(name), begin, size=13)
+        b += f"""
+  <rect x="{lx + 96}" y="{y - 10}" width="{bar_w}" height="10" rx="5" fill="{BORDER}" opacity="0.5"/>
+  <rect x="{lx + 96}" y="{y - 10}" width="0" height="10" rx="5" fill="{color}">
+    <animate attributeName="width" from="0" to="{full:.1f}" begin="{begin}s" dur="0.8s" fill="freeze"
+             calcMode="spline" keyTimes="0;1" keySplines="0.2 0.8 0.2 1"/>
+  </rect>"""
+        b += reveal(w - 24, y, f"{pct:.0%}", begin + 0.6, size=12, fill=MUTED).replace("<text ", '<text text-anchor="end" ', 1)
+    # abajo: últimos repos con push
+    b += f'\n  <line x1="24" y1="272" x2="{w - 24}" y2="272" stroke="{BORDER}"/>'
+    b += reveal(24, 296, "últimos push", 1.6, size=12, fill=MUTED)
+    for i, r in enumerate(recent):
+        date = datetime.fromisoformat(r["pushedAt"].replace("Z", "+00:00")).strftime("%Y-%m-%d")
+        lang = r["languages"]["edges"][0]["node"]["name"] if r["languages"]["edges"] else ""
+        col, row = i % 2, i // 2
+        b += reveal(24 + col * 408, 324 + row * 27,
+                    f'<tspan fill="{GREEN}">●</tspan> {escape(r["name"])} <tspan fill="{MUTED}">{date} · {escape(lang)}</tspan>',
+                    1.8 + i * 0.15)
+    (OUT / "stats.svg").write_text(svg(w, h, b, "git log --stats"), encoding="utf-8")
+    print("stats: actualizado")
 
 
 def footer():
@@ -151,18 +304,43 @@ def footer():
     (OUT / "cmd-exit.svg").write_text(svg(w, h, b, msg), encoding="utf-8")
 
 
-whoami()
-section("skills", "skills --list")
-section("projects", "ls ~/projects")
-section("stats", "git log --stats")
-footer()
-card("portafolio", "my-portafolio",
-     "Portafolio interactivo estilo escritorio Linux, con ventanas y terminal propia.",
-     ["Next.js", "TS", "Tailwind"], "live", 0.2)
-card("naturalsql", "NaturalSQL",
-     "Experimento de RAG para generar SQL a partir de lenguaje natural. Publicado en PyPI.",
-     ["Python", "RAG", "LLMs"], "released", 0.4)
-card("cc-discord", "cc-discord-presence",
-     "Discord Rich Presence que muestra tu sesión de Claude Code en tu perfil.",
-     ["Go", "Discord RPC"], "released", 0.6)
-print("ok", sorted(p.name for p in OUT.iterdir()))
+if __name__ == "__main__":
+    whoami()
+    section("skills", "skills --list")
+    section("projects", "ls ~/projects")
+    section("teaching", "ls ~/teaching")
+    section("stats", "git log --stats")
+    community()
+    footer()
+
+    card("food-rutine", "food-rutine",
+         "App de rutinas de comida con login de Google, sync entre dispositivos y avisos push.",
+         ["Next.js", "NestJS", "Prisma"], "live", 0.2)
+    card("naturalsql", "NaturalSQL",
+         "Convierte tu esquema SQL en una base vectorial para que un LLM genere SQL preciso.",
+         ["TS", "Python", "RAG"], "released", 0.35)
+    card("intgen", "intgen",
+         "CLI que genera interfaces TypeScript y schemas Zod desde un JSON o una URL. En npm.",
+         ["Node.js", "TS", "Zod"], "released", 0.5)
+    card("yiujarvis", "Yiujarvis",
+         "Asistente personal por consola para Windows: planner, memoria, plugins y tools MCP.",
+         ["Python", "LLMs", "MCP"], "in-progress", 0.65)
+    card("cs-tutor", "adaptive-cs-tutor",
+         "Skill de tutoría de CS con 8 estrategias pedagógicas que enseña con tu propio material.",
+         ["Claude Skills", "Python"], "released", 0.8)
+    card("portafolio", "my-portafolio",
+         "Portafolio interactivo estilo escritorio Linux, con ventanas y terminal propia.",
+         ["Next.js", "TS", "Tailwind"], "live", 0.95)
+
+    card("so", "so-utec",
+         "Sistemas Operativos · 23 páginas y 9 simuladores: procesos, mutex, semáforos, memoria.",
+         ["Astro", "React", "GSAP"], "live", 0.2, folder="teaching")
+    card("paralela", "comp-paralela-utec",
+         "Computación Paralela · 12 playgrounds: Amdahl, PRAM, simulador MPI, Mandelbrot.",
+         ["Astro", "React", "KaTeX"], "live", 0.35, folder="teaching")
+    card("ml", "machine-utec",
+         "Machine Learning · 32 páginas, 38 simuladores, modo examen y Python en el navegador.",
+         ["Astro", "React", "Pyodide"], "live", 0.5, folder="teaching")
+
+    stats()
+    print("ok", sorted(p.name for p in OUT.iterdir()))
