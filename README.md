@@ -8,6 +8,8 @@
 <a href="https://www.npmjs.com/~yiuseppedev"><img src="https://img.shields.io/badge/npm-07090d?style=for-the-badge&logo=npm&logoColor=92ff9f" alt="npm" /></a>
 
 <br /><br />
+[![Now playing on spotatui](https://spotatui.com/widget/yiuseppe.svg)](https://spotatui.com)
+<br /><br />
 
 <img src="./assets/whoami.svg" width="100%" alt="joseph@dev:~$ whoami" />
 
