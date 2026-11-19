@@ -8,7 +8,9 @@
 <a href="https://www.npmjs.com/~yiuseppedev"><img src="https://img.shields.io/badge/npm-07090d?style=for-the-badge&logo=npm&logoColor=92ff9f" alt="npm" /></a>
 
 <br /><br />
-[![Now playing on spotatui](https://spotatui.com/widget/yiuseppe.svg)](https://spotatui.com)
+
+<a href="https://spotatui.com"><img src="https://spotatui.com/widget/yiuseppe.svg" alt="Now playing on spotatui" /></a>
+
 <br /><br />
 
 <img src="./assets/whoami.svg" width="100%" alt="joseph@dev:~$ whoami" />
@@ -19,7 +21,7 @@
 
 <br /><br />
 
-<img src="https://skillicons.dev/icons?i=react,nextjs,astro,ts,js,html,css,tailwind,nodejs,nestjs,spring,java,postgres,prisma,aws,supabase,docker,vercel,git,github,py,cpp&theme=dark&perline=11" alt="React, Next.js, Astro, TypeScript, JavaScript, HTML, CSS, Tailwind, Node.js, NestJS, Spring, Java, PostgreSQL, Prisma, AWS, Supabase, Docker, Vercel, Git, GitHub, Python, C++" />
+<img src="https://skillicons.dev/icons?i=react,nextjs,astro,ts,js,html,css,tailwind,nodejs,nestjs,spring,java,postgres,prisma,aws,supabase,docker,vercel,git,github,py,cpp,rust,tauri&theme=dark&perline=12" alt="React, Next.js, Astro, TypeScript, JavaScript, HTML, CSS, Tailwind, Node.js, NestJS, Spring, Java, PostgreSQL, Prisma, AWS, Supabase, Docker, Vercel, Git, GitHub, Python, C++, Rust, Tauri" />
 
 <br /><br />
 
@@ -28,11 +30,22 @@
 <br /><br />
 
 <a href="https://food-rutine.vercel.app"><img src="./assets/project-food-rutine.svg" width="32%" alt="food-rutine" /></a>
+<a href="https://github.com/JosephAnderson234/nojalo/releases/latest"><img src="./assets/project-nojalo.svg" width="32%" alt="nojalo" /></a>
+<a href="https://github.com/JosephAnderson234/yiubinance"><img src="./assets/project-yiubinance.svg" width="32%" alt="yiubinance" /></a>
 <a href="https://github.com/Zay-M3/NaturalSQL-Typescript"><img src="./assets/project-naturalsql.svg" width="32%" alt="NaturalSQL" /></a>
 <a href="https://github.com/JosephAnderson234/interface-generator"><img src="./assets/project-intgen.svg" width="32%" alt="intgen" /></a>
-<a href="https://github.com/JosephAnderson234/Yiujarvis"><img src="./assets/project-yiujarvis.svg" width="32%" alt="Yiujarvis" /></a>
 <a href="https://github.com/JosephAnderson234/tutor-adaptive-skill"><img src="./assets/project-cs-tutor.svg" width="32%" alt="adaptive-cs-tutor" /></a>
+<a href="https://github.com/JosephAnderson234/Yiujarvis"><img src="./assets/project-yiujarvis.svg" width="32%" alt="Yiujarvis" /></a>
+<a href="https://github.com/JosephAnderson234/paralela-final-proj"><img src="./assets/project-mlp-paralelo.svg" width="32%" alt="mlp-paralelo" /></a>
 <a href="https://my-portafolio-plum.vercel.app"><img src="./assets/project-portafolio.svg" width="32%" alt="my-portafolio" /></a>
+
+<br /><br />
+
+<img src="./assets/cmd-oss.svg" width="100%" alt="joseph@dev:~$ git log --author=joseph --open-source" />
+
+<br /><br />
+
+<a href="https://github.com/LargeModGames/spotatui/pulls?q=is%3Apr+author%3AJosephAnderson234+is%3Amerged"><img src="./assets/oss.svg" width="100%" alt="PRs mergeados en proyectos open source" /></a>
 
 <br /><br />
 
@@ -43,6 +56,9 @@
 <a href="https://so-utec.vercel.app"><img src="./assets/teaching-so.svg" width="32%" alt="so-utec" /></a>
 <a href="https://comp-paralela-utec.vercel.app"><img src="./assets/teaching-paralela.svg" width="32%" alt="comp-paralela-utec" /></a>
 <a href="https://machine-utec.vercel.app"><img src="./assets/teaching-ml.svg" width="32%" alt="machine-utec" /></a>
+<a href="https://eda-utec.vercel.app"><img src="./assets/teaching-eda.svg" width="32%" alt="eda-utec" /></a>
+<a href="https://compi-web-zeta.vercel.app"><img src="./assets/teaching-compi.svg" width="32%" alt="compi-web" /></a>
+<a href="https://github.com/JosephAnderson234/khipu-hpc-docs-skill"><img src="./assets/teaching-khipu.svg" width="32%" alt="khipu-hpc-skill" /></a>
 
 <br /><br />
 
