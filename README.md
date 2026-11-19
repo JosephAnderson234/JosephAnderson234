@@ -35,8 +35,6 @@
 <a href="https://github.com/Zay-M3/NaturalSQL-Typescript"><img src="./assets/project-naturalsql.svg" width="32%" alt="NaturalSQL" /></a>
 <a href="https://github.com/JosephAnderson234/interface-generator"><img src="./assets/project-intgen.svg" width="32%" alt="intgen" /></a>
 <a href="https://github.com/JosephAnderson234/tutor-adaptive-skill"><img src="./assets/project-cs-tutor.svg" width="32%" alt="adaptive-cs-tutor" /></a>
-<a href="https://github.com/JosephAnderson234/Yiujarvis"><img src="./assets/project-yiujarvis.svg" width="32%" alt="Yiujarvis" /></a>
-<a href="https://github.com/JosephAnderson234/paralela-final-proj"><img src="./assets/project-mlp-paralelo.svg" width="32%" alt="mlp-paralelo" /></a>
 <a href="https://my-portafolio-plum.vercel.app"><img src="./assets/project-portafolio.svg" width="32%" alt="my-portafolio" /></a>
 
 <br /><br />

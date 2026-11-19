@@ -108,7 +108,7 @@ def whoami():
     b += typed("w2", x, y0 + lh * 3.6, "cat now.txt", 1.8)
     b += reveal(x, y0 + lh * 4.6, f'<tspan fill="{GREEN}">▶</tspan> Fullstack Developer <tspan fill="{MUTED}">@</tspan> Mekánico', 2.8)
     b += reveal(x, y0 + lh * 5.6, f'<tspan fill="{GREEN}">▶</tspan> Director de Sistemas <tspan fill="{MUTED}">@</tspan> Club de Software Libre - UTEC', 3.0)
-    b += reveal(x, y0 + lh * 6.6, f'<tspan fill="{GREEN}">▶</tspan> Contribuidor open source <tspan fill="{MUTED}">@</tspan> spotatui · compilador C--', 3.2)
+    b += reveal(x, y0 + lh * 6.6, f'<tspan fill="{GREEN}">▶</tspan> Contribuidor open source <tspan fill="{MUTED}">@</tspan> spotatui', 3.2)
     b += reveal(x, y0 + lh * 7.6, f'<tspan fill="{MUTED}">· antes: Cognitia · BioActiva · Maftech · Asistente de cátedra Programación II</tspan>', 3.4)
     b += typed("w3", x, y0 + lh * 9.2, "", 3.9)
     b += cursor(x + len(f"{USER}:~$ ") * 14 * CW, y0 + lh * 9.2, 4.0)
@@ -130,7 +130,7 @@ LOGIN = "JosephAnderson234"
 # Lenguajes que inflan el conteo por archivos generados (notebooks, sitios exportados, contenido)
 SKIP_LANGS = {"HTML", "Jupyter Notebook", "MDX", "CSS", "Tcl"}
 # Proyectos open source externos que se muestran en ~/oss (PRs y estrellas se consultan en vivo)
-OSS_REPOS = ["LargeModGames/spotatui", "jcarlos-t/c--", "csl-club/csl-page"]
+OSS_REPOS = ["LargeModGames/spotatui", "csl-club/csl-page"]
 QUERY = """
 query($login: String!) {
   user(login: $login) {
@@ -389,12 +389,6 @@ if __name__ == "__main__":
         ("cs-tutor", "adaptive-cs-tutor", "tutor-adaptive-skill",
          "Skill de tutoría de CS con 8 estrategias pedagógicas que enseña con tu propio material.",
          ["Claude Skills", "Python"], "released"),
-        ("yiujarvis", "Yiujarvis", "Yiujarvis",
-         "Asistente personal por consola para Windows: planner, memoria, plugins y tools MCP.",
-         ["Python", "LLMs", "MCP"], "in-progress"),
-        ("mlp-paralelo", "mlp-paralelo", "paralela-final-proj",
-         "Entrena redes MLP en paralelo con reducción en árbol: speedup de 9.3x en el clúster Khipu.",
-         ["Python", "multiprocessing", "Slurm"], "released"),
         ("portafolio", "my-portafolio", "my-portafolio",
          "Portafolio interactivo estilo escritorio Linux, con ventanas y terminal propia.",
          ["Next.js", "TS", "Tailwind"], "live"),
