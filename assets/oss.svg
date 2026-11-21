@@ -26,7 +26,7 @@
              begin="0.65s" dur="2.09s" fill="freeze"/>
   </rect></clipPath>
   <text x="24" y="70" font-size="14" clip-path="url(#co1)" xml:space="preserve"><tspan fill="#92ff9f">joseph@dev</tspan><tspan fill="#93a8bd">:</tspan><tspan fill="#76f7f7">~</tspan><tspan fill="#93a8bd">$ </tspan><tspan fill="#e6f5ff">gh pr list --author @me --state merged</tspan></text>
-  <text x="24" y="104" font-size="14" font-weight="400" fill="#e6f5ff" opacity="0" xml:space="preserve"><tspan fill="#92ff9f">●</tspan> <tspan fill="#76f7f7" font-weight="700">LargeModGames/spotatui</tspan>  <tspan fill="#93a8bd">★ 1.8k · Rust</tspan><set attributeName="opacity" to="1" begin="2.59s" fill="freeze"/></text>
+  <text x="24" y="104" font-size="14" font-weight="400" fill="#e6f5ff" opacity="0" xml:space="preserve"><tspan fill="#92ff9f">●</tspan> <tspan fill="#76f7f7" font-weight="700">LargeModGames/spotatui</tspan>  <tspan fill="#93a8bd">★ 1.9k · Rust</tspan><set attributeName="opacity" to="1" begin="2.59s" fill="freeze"/></text>
   <text text-anchor="end" x="816" y="104" font-size="12" font-weight="400" fill="#92ff9f" opacity="0" xml:space="preserve">4 PRs merged<set attributeName="opacity" to="1" begin="2.59s" fill="freeze"/></text>
   <text x="34" y="128" font-size="13" font-weight="400" fill="#e6f5ff" opacity="0" xml:space="preserve"><tspan fill="#93a8bd">├─</tspan> feat(tui): add a now playing panel beside the main content<set attributeName="opacity" to="1" begin="2.69s" fill="freeze"/></text>
   <text x="34" y="150" font-size="13" font-weight="400" fill="#e6f5ff" opacity="0" xml:space="preserve"><tspan fill="#93a8bd">└─</tspan> feat(cli): list a playlist's tracks by URI<set attributeName="opacity" to="1" begin="2.79s" fill="freeze"/></text>
